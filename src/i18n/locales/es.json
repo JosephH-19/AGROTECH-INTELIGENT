@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "AgroTech Inteligente",
+    "description": "Arquitectura base lista para flujos agrícolas offline-first."
+  },
+  "offlineSync": {
+    "title": "Sincronización Offline",
+    "description": "Estructura preparada para sincronizar SQLite y Postgres en el futuro."
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La ruta solicitada no está disponible en la arquitectura base.",
+    "homeLink": "Volver al inicio"
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <!-- Meta Tags Esenciales -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- SEO y Descripción -->
+    <meta
+      name="description"
+      content="AgroTech Inteligente - Plataforma de monitoreo agrícola con arquitectura limpia y offline-first"
+    />
+    <meta name="keywords" content="AgroTech, agricultura, monitoreo, inteligencia artificial, Perú" />
+    <meta name="author" content="AgroTech Team" />
+    <meta name="theme-color" content="#10B981" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AgroTech" />
+    
+    <!-- Preconexiones a APIs Externas -->
+    <link rel="preconnect" href="https://api.senamhi.gob.pe" />
+    <link rel="preconnect" href="https://power.larc.nasa.gov" />
+    <link rel="dns-prefetch" href="https://api.senamhi.gob.pe" />
+    <link rel="dns-prefetch" href="https://power.larc.nasa.gov" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preload de fuentes (si existen) -->
+    <link rel="preload" href="/fonts/inter-var.ttf" as="font" type="font/ttf" crossorigin />
+    
+    <!-- Título -->
+    <title>AgroTech Inteligente - Dashboard Agrícola</title>
+  </head>
+  <body>
+    <!-- Root Element para React -->
+    <div id="root" role="main" aria-label="Aplicación AgroTech Inteligente"></div>
+    
+    <!-- Script Principal de la Aplicación -->
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Fallback para navegadores sin JavaScript -->
+    <noscript>
+      <div style="padding: 20px; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
+        <h1>⚠️ JavaScript requerido</h1>
+        <p>AgroTech Inteligente requiere JavaScript habilitado para funcionar.</p>
+        <p>Por favor, habilita JavaScript en tu navegador e intenta nuevamente.</p>
+      </div>
+    </noscript>
+  </body>
+</html>

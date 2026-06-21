@@ -1,0 +1,21 @@
+{
+  "name": "AgroTech Inteligente",
+  "short_name": "AgroTech",
+  "description": "Plataforma agrícola offline-first con arquitectura hexagonal.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10B981",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

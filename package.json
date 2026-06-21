@@ -1,0 +1,47 @@
+{
+  "name": "agrotech-inteligente",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
+    "format": "prettier --write \"{src,*.json,*.md}\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "supabase:install-client": "npm install @supabase/supabase-js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.25.0",
+    "axios": "^1.5.0",
+    "i18next": "^23.4.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-i18next": "^13.0.0",
+    "react-router-dom": "^7.18.0",
+    "tailwindcss": "^3.4.4",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "@vitejs/plugin-react": "^6.0.2",
+    "autoprefixer": "^10.4.19",
+    "dexie": "^4.4.4",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.5",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.37",
+    "prettier": "^3.0.0",
+    "typescript": "^5.6.2",
+    "vite": "^8.0.16",
+    "vite-plugin-pwa": "^1.2.2",
+    "vitest": "^4.1.9"
+  }
+}
