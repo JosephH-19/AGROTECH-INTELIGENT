@@ -20,12 +20,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@domain': path.resolve(__dirname, 'src/domain'),
-      '@application': path.resolve(__dirname, 'src/application'),
-      '@adapters': path.resolve(__dirname, 'src/adapters'),
-      '@infrastructure': path.resolve(__dirname, 'src/infrastructure'),
-      '@shared': path.resolve(__dirname, 'src/shared'),
-      '@styles': path.resolve(__dirname, 'src/styles')
+      // Agregamos la barra para resolver de forma exacta y compatible con tsconfig
+      '@domain': path.resolve(__dirname, './src/domain'),
+      '@application': path.resolve(__dirname, './src/application'),
+      '@adapters': path.resolve(__dirname, './src/adapters'),
+      '@infrastructure': path.resolve(__dirname, './src/infrastructure'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+      '@styles': path.resolve(__dirname, './src/styles')
     }
   },
   server: {
