@@ -38,12 +38,12 @@ npm run build
 
 ## Comandos utiles
 
-| Comando | Descripcion |
-|---------|-------------|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Compilar produccion |
-| `npm run preview` | Preview de build |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
-| `npm run typecheck` | TypeScript check |
-| `npm test` | Vitest |
+| Comando             | Descripcion            |
+| ------------------- | ---------------------- |
+| `npm run dev`       | Servidor de desarrollo |
+| `npm run build`     | Compilar produccion    |
+| `npm run preview`   | Preview de build       |
+| `npm run lint`      | ESLint                 |
+| `npm run format`    | Prettier               |
+| `npm run typecheck` | TypeScript check       |
+| `npm test`          | Vitest                 |

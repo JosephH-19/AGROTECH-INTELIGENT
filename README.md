@@ -26,16 +26,16 @@ npm run dev            # http://localhost:5173
 
 ## Scripts
 
-| Comando | Descripción |
-|---------|-------------|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Compilar producción |
-| `npm run preview` | Preview de build |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
-| `npm run typecheck` | TypeScript check |
-| `npm test` | Vitest |
-| `node setup.js` | Setup interactivo |
+| Comando             | Descripción            |
+| ------------------- | ---------------------- |
+| `npm run dev`       | Servidor de desarrollo |
+| `npm run build`     | Compilar producción    |
+| `npm run preview`   | Preview de build       |
+| `npm run lint`      | ESLint                 |
+| `npm run format`    | Prettier               |
+| `npm run typecheck` | TypeScript check       |
+| `npm test`          | Vitest                 |
+| `node setup.js`     | Setup interactivo      |
 
 ## Estructura
 

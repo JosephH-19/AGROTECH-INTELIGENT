@@ -22,7 +22,6 @@ export const resolve = <T>(key: symbol): T => {
     registration.instance ??= registration.factory();
     return registration.instance as T;
   }
-
   return registration.factory();
 };
 

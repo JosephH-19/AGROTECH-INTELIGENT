@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAlertsStore, AlertSeverity } from '@shared/store/alerts/alertsStore';
 import { PageShell } from '../components/PageShell';
+import { AiChatWindow } from '../components/AiChatWindow';
 
 const severityStyle: Record<AlertSeverity, { badge: string; icon: string; border: string }> = {
   info: { badge: 'badge-blue', icon: 'i', border: 'border-l-blue-400' },
@@ -13,8 +14,17 @@ export const AlertsPage = () => {
   const { t } = useTranslation();
   const { alerts, markAsRead, deleteAlert } = useAlertsStore();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  
+  const [selectedAlertContext, setSelectedAlertContext] = useState<string | undefined>(undefined);
+  // Estado para controlar la apertura del asistente virtual de forma global en la página
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const filtered = filter === 'unread' ? alerts.filter((a) => !a.read) : alerts;
+
+  const handleConsultIA = (alertTitle: string, alertMessage: string) => {
+    setSelectedAlertContext(`${alertTitle}: ${alertMessage}`);
+    setIsChatOpen(true); // Abre automáticamente el panel al hacer la consulta
+  };
 
   return (
     <PageShell title={t('alerts.title')} subtitle={t('alerts.description')}>
@@ -65,6 +75,14 @@ export const AlertsPage = () => {
                       {!alert.read && (
                         <button onClick={() => markAsRead(alert.id)} className="text-[11px] font-semibold text-agro-secondary hover:underline">Marcar como leída</button>
                       )}
+                      
+                      <button 
+                        onClick={() => handleConsultIA(alert.title, alert.message)} 
+                        className="text-[11px] font-semibold text-emerald-600 hover:underline flex items-center gap-1"
+                      >
+                        🤖 Consultar acción con IA
+                      </button>
+
                       <button onClick={() => deleteAlert(alert.id)} className="text-[11px] font-medium text-agro-danger hover:underline">Eliminar</button>
                     </div>
                   </div>
@@ -74,6 +92,27 @@ export const AlertsPage = () => {
           })}
         </div>
       )}
+
+      {/* INTERFAZ FLOTANTE DEL CHAT CON IA (Disponible abajo a la derecha de manera limpia) */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        {isChatOpen && (
+          <div className="w-80 md:w-96 mb-2 animate-in fade-in slide-in-from-bottom-4 duration-200">
+            <div className="flex justify-between items-center bg-agro-text text-white px-4 py-2 rounded-t-xl text-xs font-bold shadow-md">
+              <span>Asistente AgroTech</span>
+              <button onClick={() => setIsChatOpen(false)} className="hover:text-agro-danger font-bold text-sm">✕</button>
+            </div>
+            <AiChatWindow key={selectedAlertContext} contextAlert={selectedAlertContext} />
+          </div>
+        )}
+        
+        <button
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-agro-secondary text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+          title="Consultar Asistente IA"
+        >
+          {isChatOpen ? '💬' : '🤖'}
+        </button>
+      </div>
     </PageShell>
   );
 };

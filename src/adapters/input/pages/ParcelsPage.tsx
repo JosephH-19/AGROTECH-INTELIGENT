@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParcelsStore, Parcel } from '@shared/store/parcels/parcelsStore';
 import { PageShell } from '../components/PageShell';
+// 1. IMPORTAMOS EL COMPONENTE DEL MAPA QUE CREAMOS
+import { NasaSatelliteMap } from '../components/NasaSatelliteMap';
 
 const soilTypes = ['clay', 'loam', 'sandy', 'silt'] as const;
 const healthBadge = {
@@ -35,6 +37,20 @@ export const ParcelsPage = () => {
     setEditingId(parcel.id);
     setShowForm(true);
   };
+
+  // 2. ADAPTAMOS TUS PARCELAS AL FORMATO QUE RECOGE EL MAPA SATELITAL
+  const mappedParcelsForMap = parcels.map((p) => ({
+    id: p.id,
+    name: p.name,
+    lat: p.lat || -9.1900,  // Si no tiene latitud asignada, usa el centro de Perú por defecto
+    lng: p.lng || -75.0152, // Si no tiene longitud asignada, usa el centro de Perú por defecto
+    crop: t(`parcels.soilTypes.${p.soilType}`), // Usamos el tipo de suelo como detalle descriptivo en el pin
+  }));
+
+  // Determinamos el centro del mapa dinámicamente según la primera parcela registrada
+  const mapCenter: [number, number] = parcels.length > 0 && parcels[0].lat && parcels[0].lng
+    ? [parcels[0].lat, parcels[0].lng]
+    : [-9.1900, -75.0152];
 
   return (
     <PageShell title={t('parcels.title')} subtitle={t('parcels.description')}>
@@ -93,29 +109,40 @@ export const ParcelsPage = () => {
           <p className="mt-4 text-sm text-agro-text-secondary">{t('parcels.empty')}</p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {parcels.map((parcel) => (
-            <div key={parcel.id} className="card-hover p-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold text-agro-text">{parcel.name}</h3>
-                  <p className="text-xs text-agro-text-secondary">{parcel.area} ha</p>
+        /* 3. DISTRIBUCIÓN EN REJILLA DE DOS COLUMNAS: IZQUIERDA LISTADO, DERECHA MAPA SATELITAL */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Columna Izquierda (Listado de Tarjetas) */}
+          <div className="lg:col-span-1 space-y-4 max-h-[500px] overflow-y-auto pr-1">
+            {parcels.map((parcel) => (
+              <div key={parcel.id} className="card-hover p-5 bg-white border border-agro-border/40">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-agro-text">{parcel.name}</h3>
+                    <p className="text-xs text-agro-text-secondary">{parcel.area} ha</p>
+                  </div>
+                  <span className={`text-[11px] font-semibold ${healthBadge[parcel.health]}`}>
+                    {t(`parcels.${parcel.health}`)}
+                  </span>
                 </div>
-                <span className={`text-[11px] font-semibold ${healthBadge[parcel.health]}`}>
-                  {t(`parcels.${parcel.health}`)}
-                </span>
+                <div className="mt-3 space-y-1 text-[11px] text-agro-text-secondary">
+                  <p><span className="font-medium">Suelo:</span> {t(`parcels.soilTypes.${parcel.soilType}`)}</p>
+                  <p><span className="font-medium">Ubicación:</span> {parcel.province}, {parcel.district}</p>
+                  <p><span className="font-medium">Coords:</span> {parcel.lat}, {parcel.lng}</p>
+                </div>
+                <div className="mt-4 flex gap-2 border-t border-agro-border/30 pt-3">
+                  <button onClick={() => handleEdit(parcel)} className="btn-outline text-[11px] px-3 py-1.5">Editar</button>
+                  <button onClick={() => { if (confirm(t('parcels.confirmDelete'))) deleteParcel(parcel.id); }} className="btn-danger text-[11px] px-3 py-1.5">Eliminar</button>
+                </div>
               </div>
-              <div className="mt-3 space-y-1 text-[11px] text-agro-text-secondary">
-                <p>Suelo: {t(`parcels.soilTypes.${parcel.soilType}`)}</p>
-                <p>Ubicación: {parcel.province}, {parcel.district}</p>
-                <p>Coords: {parcel.lat}, {parcel.lng}</p>
-              </div>
-              <div className="mt-4 flex gap-2 border-t border-agro-border/30 pt-3">
-                <button onClick={() => handleEdit(parcel)} className="btn-outline text-[11px] px-3 py-1.5">Editar</button>
-                <button onClick={() => { if (confirm(t('parcels.confirmDelete'))) deleteParcel(parcel.id); }} className="btn-danger text-[11px] px-3 py-1.5">Eliminar</button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Columna Derecha (Visor Satelital de la NASA en Tiempo Real) */}
+          <div className="lg:col-span-2">
+            <NasaSatelliteMap parcels={mappedParcelsForMap} center={mapCenter} />
+          </div>
+
         </div>
       )}
     </PageShell>
