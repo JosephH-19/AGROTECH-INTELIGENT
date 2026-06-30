@@ -2,8 +2,7 @@
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 // Usamos el endpoint oficial de generación de contenidos compatible con Flash
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
-
+const BASE_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 /**
  * Función auxiliar para convertir un archivo (File) a Base64 estructurado para Gemini
  */
@@ -22,19 +21,34 @@ const fileToGenerativePart = async (file: File): Promise<{ inlineData: { data: s
 };
 
 /**
- * 1. CHAT INTERACTIVO & RECOMENDACIONES AGRÍCOLAS
+ * 1. CHAT INTERACTIVO & RECOMENDACIONES AGRÍCOLAS CON CONTEXTO
+ * Mantiene compatibilidad total con producción si se llama sin el tercer parámetro.
  */
-export const askGeminiChat = async (userPrompt: string, history: Array<{ role: 'user' | 'model', text: string }> = []) => {
-  // Estructuramos el historial si deseas mantener contexto en el chat interactivo
+export const askGeminiChat = async (
+  userPrompt: string, 
+  history: Array<{ role: 'user' | 'model', text: string }> = [], 
+  databaseContext: string = ""
+) => {
+  // Mapeamos el historial existente asegurando la estructura nativa requerida por Gemini
   const contents = history.map(h => ({
     role: h.role,
     parts: [{ text: h.text }]
   }));
 
-  // Agregamos el nuevo mensaje con un "System Prompt" implícito para guiarlo como experto agrícola
+  // Construcción del Prompt del Sistema + Datos de Supabase de manera limpia
+  let promptCompuesto = `Actúa como el director técnico agrícola y agrónomo experto de AgroTech-J.\n`;
+  
+  if (databaseContext) {
+    promptCompuesto += `CONTEXTO EN TIEMPO REAL DEL SISTEMA (SUPABASE):\n${databaseContext}\n\n`;
+  }
+  
+  promptCompuesto += `Pregunta del usuario: ${userPrompt}\n`;
+  promptCompuesto += `Responde de forma clara, práctica, compacta y ejecutiva.`;
+
+  // Agregamos el nuevo mensaje al final del arreglo de turnos
   contents.push({
     role: "user",
-    parts: [{ text: `Actúa como un agrónomo experto de AgroTech-J. Responde de forma clara y práctica: ${userPrompt}` }]
+    parts: [{ text: promptCompuesto }]
   });
 
   try {
@@ -45,6 +59,12 @@ export const askGeminiChat = async (userPrompt: string, history: Array<{ role: '
     });
     
     const data = await response.json();
+    
+    // Validación por si la API retorna una estructura vacía o error de cuotas
+    if (!data.candidates || data.candidates.length === 0) {
+      throw new Error(data.error?.message || "Respuesta vacía o error en el modelo.");
+    }
+    
     return data.candidates[0].content.parts[0].text;
   } catch (error) {
     console.error("Error en el Chat de Gemini:", error);
